@@ -1,0 +1,428 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Details Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        #searchForm {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #4caf50;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        p.error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+
+    <script>
+        // $(document).ready(function () {
+        //     $("#searchForm").submit(async function (event) {
+        //         event.preventDefault();
+
+        //         const teamName = $("#teamName").val();
+
+        //         try {
+        //             const response = await fetch(`/team/${encodeURIComponent(teamName)}`, {
+        //                 method: 'POST',
+        //             });
+        //             const results = await response.json();
+
+        //             if (results.length > 0) {
+        //                 $("#result").empty(); // Clear previous results
+
+        //                 results.forEach(result => {
+        //                     $("#result").append(`
+        //                         <h3>${result.team1} v ${result.team2}</h3>
+        //                         <p>Time: ${result.matchTime}</p>
+        //                         <p>Venue: ${result.venue}</p>
+        //                         <hr>
+        //                     `);
+        //                 });
+        //             } else {
+        //                 $("#result").html("<p>Team not found</p>");
+        //             }
+        //         } catch (error) {
+        //             console.error("Error fetching data:", error);
+        //             $("#result").html("<p>An error occurred</p>");
+        //         }
+        //     });
+        // });
+
+        // $(document).ready(function () {
+        //     $("#searchForm").submit(async function (event) {
+        //         event.preventDefault();
+
+        //         const teamName = $("#teamName").val();
+
+        //         try {
+        //             const response = await fetch(`/team/${encodeURIComponent(teamName)}`, {
+        //                 method: 'POST',
+        //             });
+        //             const results = await response.json();
+
+        //             if (results.length > 0) {
+        //                 $("#result").empty(); // Clear previous results
+
+        //                 results.forEach(result => {
+        //                     $("#result").append(`
+        //                         <h3>${result.team1} v ${result.team2}</h3>
+        //                         <p>Time: ${result.matchTime}</p>
+        //                         <p>Venue: ${result.venue}</p>
+        //                         <hr>
+        //                     `);
+        //                 });
+        //             } else {
+        //                 $("#result").html("<p>No matches found</p>");
+        //             }
+        //         } catch (error) {
+        //             console.error("Error fetching data:", error);
+        //             $("#result").html("<p>An error occurred</p>");
+        //         }
+        //     });
+        // });
+
+        $(document).ready(function () {
+            $("#searchForm").submit(async function (event) {
+                event.preventDefault();
+                
+                const teamName = $("#teamName").val();
+
+                try {
+                    const response = await fetch(`/team/${encodeURIComponent(teamName)}`);
+                    const result = await response.json();
+
+                    if (result && result.length > 0) {
+                        $("#result").empty(); // Clear previous results
+
+                        result.forEach(match => {
+                            $("#result").append(`
+                                <h3>${match.team1} v ${match.team2}</h3>
+                                <p>Time: ${match.matchTime}</p>
+                                <p>Venue: ${match.venue}</p>
+                                <hr>
+                            `);
+                        });
+                    } else {
+                        $("#result").html("<p>Team not found</p>");
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    $("#result").html("<p>An error occurred</p>");
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h2>Search Team Details</h2>
+
+    <form id="searchForm" method="POST">
+        <label for="teamName">Enter Your Favourite Team Name:</label>
+        <input type="text" id="teamName" name="teamName" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="result"></div>
+</body>
+</html>
+ -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Team Details Search</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 20px;
+            }
+    
+            h2 {
+                color: #333;
+                text-align: center;
+            }
+    
+            #searchForm {
+                margin-top: 20px;
+                background-color: #fff;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+    
+            label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+                color: #333;
+            }
+    
+            input {
+                width: calc(100% - 20px);
+                padding: 10px;
+                margin-bottom: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+    
+            input:focus {
+                border-color: #4caf50;
+            }
+    
+            button {
+                background-color: #4caf50;
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s;
+            }
+    
+            button:hover {
+                background-color: #45a049;
+            }
+    
+            #result {
+                margin-top: 20px;
+                background-color: #fff;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+    
+            h3 {
+                color: #333;
+                margin-bottom: 10px;
+            }
+    
+            p {
+                margin-bottom: 10px;
+                color: #555;
+            }
+    
+            p:last-child {
+                margin-bottom: 0;
+            }
+    
+            p.error {
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+
+        <!-- <script>
+        $(document).ready(function () {
+            $("#searchForm").submit(async function (event) {
+                event.preventDefault();
+
+                const teamName = $("#teamName").val();
+
+                try {
+                    const response = await fetch(`/team/${encodeURIComponent(teamName)}`, {
+                        method: 'POST',
+                    });
+                    const result = await response.json();
+
+                    if (result) {
+                        $("#result").html(`
+                            <h3>${result.team1} v ${result.team2}</h3>
+                            <p>Time: ${result.matchTime}</p>
+                            <p>Venue: ${result.venue}</p>
+                        `);
+                    } else {
+                        $("#result").html("<p>Team not found</p>");
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    $("#result").html("<p>An error occurred</p>");
+                }
+            });
+        });
+    </script> -->
+
+    <script>
+    $(document).ready(function () {
+            $("#searchForm").submit(async function (event) {
+                event.preventDefault();
+
+                const teamName = $("#teamName").val();
+
+                try {
+                    const response = await fetch(`/team/${encodeURIComponent(teamName)}`, {
+                        method: 'POST',
+                    });
+                    const results = await response.json();
+
+                    if (results.length > 0) {
+                        $("#result").empty(); // Clear previous results
+
+                        results.forEach(result => {
+                            $("#result").append(`
+                                <h3>${result.team1} v ${result.team2}</h3>
+                                <p>Time: ${result.matchTime}</p>
+                                <p>Venue: ${result.venue}</p>
+                                <hr>
+                            `);
+                        });
+                    } else {
+                        $("#result").html("<p>No matches found</p>");
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    $("#result").html("<p>An error occurred</p>");
+                }
+            });
+        });
+
+    </script>
+    
+    </head>
+    <body>
+
+        <h2>Search Team Details</h2>
+
+        <form id="searchForm" method="POST">
+            <label for="teamName">Enter Your Favourite Team Name:</label>
+            <input type="text" id="teamName" name="teamName" required>
+            <button type="submit">Search</button>
+        </form>
+        
+
+        <div id="result"></div>
+
+        <script>
+        $(document).ready(function () {
+            $("#searchForm").submit(async function (event) {
+                event.preventDefault();
+                
+                const teamName = $("#teamName").val();
+
+                try {
+                    const response = await fetch(`/team/${encodeURIComponent(teamName)}`);
+                    const result = await response.json();
+
+                    if (result) {
+                        $("#result").html(`
+                            <h3>${result.team1} v ${result.team2}</h3>
+                            <p>Time: ${result.matchTime}</p>
+                            <p>Venue: ${result.venue}</p>
+                        `);
+                    } else {
+                        $("#result").html("<p>Team not found</p>");
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    $("#result").html("<p>An error occurred</p>");
+                }
+            });
+        });
+    </script>
+
+    </body>
+</html>
