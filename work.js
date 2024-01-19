@@ -2,6 +2,17 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const sleep = require('util').promisify(setTimeout);
 
+const dateFormat = (dateString)=>{
+    var parts = dateString.split(/[\s,]+/);
+    var time = parts[0] + " " + parts[1];
+    var month = parts[3];
+    var day = parseInt(parts[4]);
+    var year = parseInt(parts[5]);
+    var formattedDate = `${month} ${day}, ${year} ${time}`;
+    var dateObject = new Date(formattedDate);
+    return dateObject;
+}
+
 async function scrapeContentByClass() {
     const url = 'https://www.espn.in/football/fixtures?league=afc.asian.cup';
 
@@ -15,26 +26,28 @@ async function scrapeContentByClass() {
 
             if (response.status === 200) {
                 const $ = cheerio.load(response.data);
-                const targetElements = $('.Table__TR--sm');
-                const data = [];
-
-                targetElements.each((i, element) => {
-                    const $row = $(element);
-
-                    const team1 = $row.find('.events__col .Table__Team.away').text().trim();
-                    const team2 = $row.find('.colspan__col .Table__Team').text().trim();
-                    const matchTime = $row.find('.date__col a').text().trim();
-                    const venue = $row.find('.venue__col div').text().trim();
-
-                    // Store data in an array of objects
-                    data.push({
-                        team1,
-                        team2,
-                        matchTime,
-                        venue,
+                const targetElements = $('.ResponsiveTable');
+                let data = [];
+                targetElements.each((i, element)=>{
+                    let date = $(element).find('.Table__Title').text().trim();
+                    const innerElements = $(element).find('.Table__TR--sm');
+                    innerElements.each(async (i, el)=>{
+                        let $row = $(el);
+                        let team1 = $row.find('.events__col .Table__Team.away').text().trim();
+                        let team2 = $row.find('.colspan__col .Table__Team').text().trim();
+                        let time = $row.find('.date__col a').text().trim();
+                        let venue = $row.find('.venue__col div').text().trim();
+                        if(time==="" || time===null){
+                            time = "2:00 PM";
+                        }
+                        const matchTime = dateFormat(time+" "+date);
+                        data.push({team1,team2,matchTime,venue});
+                        console.log(`- ${team1} v ${team2}`);
+                        console.log(`- Time: ${matchTime}`);
+                        console.log(`- Venue: ${venue}`);
+                        console.log('');
                     });
                 });
-
                 return data;
             } else {
                 // ... (rest of the error handling code)
