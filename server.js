@@ -7,7 +7,7 @@ const { scrapeContentByClass } = require('./work');
 const app = express();
 const port = 3000;
 
-const uri = 'mongodb://sahillatif78:Sahil123@ac-jcsy4gu-shard-00-00.homgozd.mongodb.net:27017,ac-jcsy4gu-shard-00-01.homgozd.mongodb.net:27017,ac-jcsy4gu-shard-00-02.homgozd.mongodb.net:27017/?ssl=true&replicaSet=atlas-cz17q8-shard-0&authSource=admin&retryWrites=true&w=majority';
+const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,8 +18,8 @@ app.post('/team/:teamName', async (req, res) => {
 
     try {
         await client.connect();
-        const database = client.db('test');
-        const collection = database.collection('events');
+        const database = client.db('NewDatabase');
+        const collection = database.collection('saim');
 
         // Find all matches that have the entered team name
         const matches = await collection.find({
