@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <link rel="stylesheet" href="form.css">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Sign Up</h2>
+    <form class="signup-form">
+        <input type="text" id="name" name="fullname" placeholder="Full Name" required>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <input type="tel" id="phone" name="phone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+        <p>Already have an account? <a href="/login">Login</a></p>
+    </form>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('form.signup-form').submit(function(event) {
+      event.preventDefault();
+
+      if (!validateForm()) {
+        return;
+      }
+
+      var formData = {
+        fullname: $('#name').val(),
+        email: $('#email').val(),
+        phone: $('#phone').val(),
+        password: $('#password').val()
+      };
+
+      $.ajax({
+        type: 'POST',
+        url: '/signup',
+        data: formData,
+        success: function(response) {
+          window.location.href = "/home";
+        },
+        error: function(error) {
+          console.error('Signup error:', error.responseText);
+          if(error.responseText==='emailExist'){
+            alert('Email already registered.');
+            valid = false;
+          }
+        }
+      });
+    });
+
+    function validateForm() {
+      var valid = true;
+
+      var fullName = $('#name').val();
+      if (!fullName) {
+        alert('Please enter your full name.');
+        valid = false;
+      }
+
+      var email = $('#email').val();
+      if (!email || !isValidEmail(email)) {
+        alert('Please enter a valid email address.');
+        valid = false;
+      }
+
+      var phone = $('#phone').val();
+      if (!phone || !isValidPhoneNumber(phone)) {
+        alert('Please enter a valid phone number.');
+        valid = false;
+      }
+
+      var password = $('#password').val();
+      if (!password) {
+        alert('Please enter a password.');
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    function isValidEmail(email) {
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function isValidPhoneNumber(phone) {
+      var phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phone);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -87,3 +87,26 @@ p.error {
     color: red;
     font-weight: bold;
 }
+.icons{
+    display: flex;
+    justify-content: flex-start;
+}
+.fav{
+background: url(./media/favorite.png);
+}
+.bkm{
+    background: url(./media/bookmark.png);
+}
+.favbg{
+background: url(./media/star.png);
+}
+.bkmbg{
+    background: url(./media/bookmark2.png);
+}
+.icons div{
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+    margin: 10px;
+    cursor: pointer;
+}

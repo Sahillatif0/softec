@@ -1,61 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Team Details Search</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
-        <link rel="stylesheet" href="./style.css">
-    <script>
-    $(document).ready(function () {
-            $("#searchForm").submit(async function (event) {
-                event.preventDefault();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Website</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-                const teamName = $("#teamName").val();
+<header class="navbar">
+  <div class="container">
+    <h1>Your Website</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <li class="auth-options">
+          <a href="signup.html">Sign Up</a>
+          <a href="login.html">Sign In</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-                try {
-                    const response = await fetch(`/team/${encodeURIComponent(teamName)}`, {
-                        method: 'POST',
-                    });
-                    const results = await response.json();
+<main class="content">
+  <div class="container">
+    <h2>Welcome to Your Website</h2>
+    <p>This is the main content area of your website. Customize it as needed.</p>
+  </div>
+</main>
 
-                    if (results.length > 0) {
-                        $("#result").empty(); // Clear previous results
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 Your Website. All rights reserved.</p>
+  </div>
+</footer>
 
-                        results.forEach(result => {
-                            $("#result").append(`
-                                <h3>${result.team1} v ${result.team2}</h3>
-                                <p>Time: ${result.matchTime}</p>
-                                <p>Venue: ${result.venue}</p>
-                                <hr>
-                            `);
-                        });
-                    } else {
-                        $("#result").html("<p>No matches found</p>");
-                    }
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                    $("#result").html("<p>An error occurred</p>");
-                }
-            });
-
-        });
-
-    </script>
-    
-    </head>
-    <body>
-
-        <h2>Search Team Details</h2>
-
-        <form id="searchForm" method="POST">
-            <label for="teamName">Enter Your Favourite Team Name:</label>
-            <input type="text" id="teamName" name="teamName" required>
-            <button type="submit">Search</button>
-        </form>
-        
-
-        <div id="result"></div>
-    </body>
-</html>
+</body>
+</
